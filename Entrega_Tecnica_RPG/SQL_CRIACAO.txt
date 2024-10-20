@@ -1,0 +1,130 @@
+CREATE TABLE TB_JOGADOR (
+	ID_Jogador BIGINT PRIMARY KEY AUTO INCREMENT,
+	Nome VARCHAR(100) NOT NULL,
+	Email VARCHAR(100) NOT NULL UNIQUE,
+	Senha VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE TB_PERSONAGEM (
+	ID_Personagem BIGINT PRIMARY KEY AUTO INCREMENT,
+	Nome VARCHAR(100) NOT NULL,
+	Cor VARCHAR(20) NOT NULL,
+	Nivel INT NOT NULL,
+	Pontos_Vida INT NOT NULL,
+	Pontos_Mana INT NOT NULL,
+	Pontos_Combate INT NOT NULL,
+	Pontos_Defesa INT NOT NULL,
+	Pontos_Inteligencia INT NOT NULL,
+	ID_Jogador BIGINT NOT NULL,
+	ID_Guilda BIGINT,
+	ID_Raca BIGINT NOT NULL,
+	ID_Classe BIGINT NOT NULL
+);
+
+CREATE TABLE TB_RACA (
+	ID_Raca BIGINT PRIMARY KEY AUTO INCREMENT,
+	Nome VARCHAR(100) NOT NULL UNIQUE,
+	Idioma VARCHAR(50) NOT NULL,
+	Tamanho VARCHAR(20) NOT NULL,
+	Vantagens VARCHAR(255) NOT NULL,
+	Fraquezas VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE TB_GUILDA (
+	ID_Guilda BIGINT PRIMARY KEY AUTO INCREMENT,
+	Nome VARCHAR(100) NOT NULL UNIQUE,
+	Descricao VARCHAR(50) NOT NULL,
+	Quantidade_Membros INT NOT NULL
+);
+
+CREATE TABLE TB_CLASSE (
+	ID_Classe BIGINT PRIMARY KEY AUTO INCREMENT,
+	Nome VARCHAR(100) NOT NULL UNIQUE,
+	Especialidade VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE TB_ITENS_PERSONAGEM (
+	ID_Personagem BIGINT NOT NULL,
+	ID_Item BIGINT NOT NULL,
+	Quantidade INT NOT NULL
+);
+
+CREATE TABLE TB_ITENS (
+	ID_Item BIGINT PRIMARY KEY AUTO INCREMENT,
+	Nome VARCHAR(100) NOT NULL UNIQUE,
+	Tipo VARCHAR(50) NOT NULL,
+	Nivel INT NOT NULL,
+	Pontos_Dano INT NOT NULL,
+	Pontos_Cura INT NOT NULL,
+	Item_Chave BOOL NOT NULL
+);
+
+CREATE TABLE TB_NPC (
+	ID_Npc BIGINT PRIMARY KEY AUTO INCREMENT,
+	Nome VARCHAR(100) NOT NULL,
+	Nivel INT NOT NULL,
+	Funcao VARCHAR(50) NOT NULL,
+	Pontos_Vida INT NOT NULL,
+	Pontos_Combate INT NOT NULL,
+	Pontos_Defesa INT NOT NULL,
+	Pontos_Inteligencia INT NOT NULL,
+	ID_Guilda BIGINT,
+	ID_Raca BIGINT NOT NULL,
+	ID_Classe BIGINT NOT NULL
+);
+
+CREATE TABLE TB_HABILIDADES (
+	ID_Habilidade BIGINT PRIMARY KEY AUTO INCREMENT,
+	Nome VARCHAR(100) NOT NULL,
+	Tipo VARCHAR(255) NOT NULL,
+	Custo_Mana INT NOT NULL,
+	Pontos_Dano INT NOT NULL,
+	Pontos_Cura INT NOT NULL,
+	Valor_Dano_Extra INT NOT NULL,
+	Desc_Dano_Extra VARCHAR(100) NOT NULL,
+	ID_Classe BIGINT NOT NULL
+);
+
+ALTER TABLE TB_PERSONAGEM ADD CONSTRAINT fk_jogador FOREIGN KEY(ID_Jogador) REFERENCES TB_JOGADOR (ID_Jogador);
+ALTER TABLE TB_PERSONAGEM ADD CONSTRAINT fk_guilda FOREIGN KEY(ID_Guilda) REFERENCES TB_GUILDA (ID_Guilda);
+ALTER TABLE TB_PERSONAGEM ADD CONSTRAINT fk_raca FOREIGN KEY(ID_Raca) REFERENCES TB_RACA (ID_Raca);
+ALTER TABLE TB_PERSONAGEM ADD CONSTRAINT fk_classe FOREIGN KEY(ID_Classe) REFERENCES TB_CLASSE (ID_Classe);
+
+ALTER TABLE TB_ITENS_PERSONAGEM ADD CONSTRAINT fk_personagem FOREIGN KEY(ID_Personagem) REFERENCES TB_PERSONAGEM (ID_Personagem);
+ALTER TABLE TB_ITENS_PERSONAGEM ADD CONSTRAINT fk_item FOREIGN KEY(ID_Item) REFERENCES TB_ITENS (ID_Item);
+
+ALTER TABLE TB_NPC ADD CONSTRAINT fk_guilda FOREIGN KEY(ID_Guilda) REFERENCES TB_GUILDA (ID_Guilda);
+ALTER TABLE TB_NPC ADD CONSTRAINT fk_raca FOREIGN KEY(ID_Raca) REFERENCES TB_RACA (ID_Raca);
+ALTER TABLE TB_NPC ADD CONSTRAINT fk_classe FOREIGN KEY(ID_Classe) REFERENCES TB_CLASSE (ID_Classe);
+
+ALTER TABLE TB_HABILIDADES ADD CONSTRAINT fk_classe FOREIGN KEY(ID_Classe) REFERENCES TB_CLASSE (ID_Classe);
+
+INSERT INTO TB_ITENS (Nome, Tipo, Nivel, Pontos_Dano, Pontos_Cura, Item_Chave)
+VALUES ('Espada de madeira', 'Arma', 1, 6, 0, false),
+('Poção de Cura', 'Suporte', 2, 0, 10, false),
+('Chave masmorra', 'Artefato', 1, 0, 0, true);
+
+INSERT INTO TB_CLASSE (Nome, Especialidade)
+VALUES ('Arqueiro', 'Armas e ferramentas de longa distância'),
+('Paladino', 'Combates corpo a corpo e utilização de magias'),
+('Mago', 'Excepcional com magias');
+
+INSERT INTO TB_RACA (Nome, Idioma, Tamanho, Vantagens, Fraquezas)
+VALUES ('Elfo', 'Comum e Élfico', '1,50 - 1,80', 'Melhor manuseio de arcos longos e curtos', 'Vulnerabilidade a ferro'),
+('Anão', 'Comum e Anão', '1,20 - 1,50', 'Proficientes com o uso do martelo de arremesso e martelo de guerra', 'Alcoolismo'),
+('Gnomo', 'Comum e Gnomish', '0,90 - 1,20', 'Engenheiros, alquimistas, engenhoqueiros e inventores habilidosos', 'Luz Solar');
+
+INSERT INTO TB_GUILDA (Nome, Descricao, Quantidade_Membros)
+VALUES ('Guilda dos Aventureiros', 'Guilda com foco em aventuras', 15),
+('Guilda dos Ferreiros', 'Guilda com foco em ferreiros e engenheiros', 26),
+('Guilda dos Anões', 'Guilda de Anões', 67);
+
+INSERT INTO TB_JOGADOR (Nome, Email, Senha)
+VALUES ('João', 'jo.ao@gmail.com', 'h12g3fvj1h'),
+('Pedro', 'pedro@hotmail.com', 'lakshdgb1837'),
+('Gabriel', 'ga.briel@outlook.com', 'asklughd190827');
+
+
+
+
+
